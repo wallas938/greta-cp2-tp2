@@ -12,7 +12,7 @@
    <children>
       <VBox layoutX="-21.0" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox fx:id="titulaireName" layoutX="20.0" layoutY="100.0" onDragDetected="#onAddNewAccount" prefHeight="32.0" prefWidth="380.0" spacing="20.0">
+            <HBox layoutX="20.0" layoutY="100.0" onDragDetected="#onAddNewAccount" prefHeight="32.0" prefWidth="380.0" spacing="20.0">
                <children>
                   <Label text="Titulaire" />
                   <TextField fx:id="titulaireName" HBox.hgrow="ALWAYS" />
@@ -27,9 +27,9 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="titulaireNameError" alignment="CENTER">
+            <HBox alignment="CENTER">
                <children>
-                  <Label fx:id="titulaireNameError" text="Nom du titulaire incorrecte" textFill="#ee0000" />
+                  <Label id="titulaireNameError" fx:id="titulaireNameError" text="Nom du titulaire incorrecte" textFill="#ee0000" />
                </children>
                <padding>
                   <Insets left="20.0" />
@@ -38,7 +38,7 @@
                   <Insets bottom="15.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="titulaireSolde" alignment="CENTER_LEFT" prefWidth="380.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefWidth="380.0" spacing="20.0">
                <children>
                   <Label text="Solde" />
                   <TextField fx:id="titulaireSolde" HBox.hgrow="ALWAYS" />
@@ -49,7 +49,7 @@
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <Label fx:id="titulaireSoldeError" text="Veuillez entrer un solde valide" textFill="#ee0000" />
+                  <Label id="titulaireSoldeError" fx:id="titulaireSoldeError" text="Veuillez entrer un solde valide" textFill="#ee0000" />
                </children>
                <padding>
                   <Insets left="20.0" />

@@ -2,16 +2,13 @@ package fr.greta92.banqueappfx;
 
 import fr.greta92.banqueappfx.model.Banque;
 import fr.greta92.banqueappfx.model.Compte;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,6 +36,9 @@ import java.io.IOException;
  * </p>
  */
 public class AjouterCompteController {
+
+    @FXML
+    ListView<Compte> compteListe;
     @FXML
     Label titulaireSoldeError;
     @FXML
@@ -48,28 +48,51 @@ public class AjouterCompteController {
     @FXML
     TextField titulaireSolde;
 
+    @FXML
+    public void initialize() {
+        setAllLabelErrorState(false);
+
+        {
+            titulaireName.setOnKeyReleased(keyEvent -> {
+                titulaireNameError.setVisible(!isStringValueValid(titulaireName.getText()));
+            });
+
+            titulaireSolde.setOnKeyReleased(keyEvent -> {
+                titulaireSoldeError.setVisible(!isSoldeIsValid(titulaireSolde.getText()));
+            });
+        }
+
+    }
+
+
+
     public Banque getBank(String bankFilename) throws IOException, ClassNotFoundException {
         return Main.readBanque(bankFilename);
     }
 
     public void saveBank(String bankFilename, Banque bank) throws IOException, ClassNotFoundException {
         Main.saveBanque(bankFilename, bank);
-        Banque banque = Main.readBanque(bankFilename);
-        System.out.println(banque.toString() + " line: 54, saveBank 'AjouterCompteController Method'");
+        Banque b = Main.readBanque(bankFilename);
+        System.out.println(b);
     }
 
     public void onAddNewAccount(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         Banque bank = getBank("Banque.ser");
-//        if ((!isStringValueIsEmpty(titulaireName.getText()) || !isStringValueIsEmpty(titulaireSolde.getText())) &&
-//                isDoubleValueIsValid(titulaireSolde.getText())) {
-//            bank.ouvrirCompte(titulaireName.getText(), Double.parseDouble(titulaireSolde.getText()));
-//            onCloseAccountSavingForm(actionEvent);
-//            saveBank("Banque.ser", bank);
-//            return;
-//        }
+        if ((isStringValueValid(titulaireName.getText()) && isStringValueValid(titulaireSolde.getText())) &&
+                isSoldeIsValid(titulaireSolde.getText())) {
+            bank.ouvrirCompte(titulaireName.getText(), Double.parseDouble(titulaireSolde.getText()));
+            saveBank("Banque.ser", bank);
+            onCloseAccountSavingForm(actionEvent);
+            return;
+        }
     }
 
-    public boolean isDoubleValueIsValid(String value) {
+    public void setAllLabelErrorState(boolean state) {
+        titulaireNameError.setVisible(state);
+        titulaireSoldeError.setVisible(state);
+    }
+
+    public boolean isSoldeIsValid(String value) {
         try {
             Double.parseDouble(value);
             return true;
@@ -78,14 +101,19 @@ public class AjouterCompteController {
         }
     }
 
-    public boolean isStringValueIsEmpty(String value) {
-        return value.trim().isEmpty();
+    public boolean isStringValueValid(String value) {
+        return !value.trim().isEmpty();
     }
 
     public void onCloseAccountSavingForm(ActionEvent actionEvent) {
         Node node = (Node) actionEvent.getSource();
         Stage thisStage = (Stage) node.getScene().getWindow();
         thisStage.hide();
+    }
+
+    public void setBanque(Banque banque) {
+        compteListe.setItems(banque.getComptes());
+        compteListe.refresh();
     }
 
 }
